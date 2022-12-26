@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ndate">
+<select id="list" resultType="map" parameterType="String">
+
+SELECT  trunc(TO_DATE(#{today}, 'YYYYMMDD')-sysdate+1) as tot,
+to_char(TO_DATE(#{today}, 'YYYYMMDD'),'day') dfweek,
+trunc(months_between(sysdate,TO_DATE(#{today}, 'YYYYMMDD'))/12,0) as year,
+trunc(mod(months_between(TO_DATE(#{today}, 'YYYYMMDD'),sysdate),12),0) as mon,
+trunc(mod(mod(months_between(TO_DATE(#{today}, 'YYYYMMDD'),sysdate)/12,1)*12,1)*(365/12),0)+1 
+as day FROM DUAL
+
+</select>
+
+
+
+
+
+
+
+
+
+
+
+<select id="dday" resultType="String" parameterType="String">
+  select sysdate + to_dsinterval(#{dday}) dday from dual
+</select>
+</mapper>  

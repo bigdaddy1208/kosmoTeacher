@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emp">
+
+<select id="list"  resultType="evo" parameterType="map">
+	select * from emp 
+		<if test="searchValue != null and searchType != null">
+			<where>
+				<choose>
+					<when test="searchType=='ename'">
+						ename like '%'|| #{searchValue} ||'%'
+					</when>
+					<when test="searchType=='empno'">
+						empno like '%'|| #{searchValue} ||'%'
+					</when>
+					<when test="searchType=='job'">
+						job like '%'|| #{searchValue} ||'%'
+					</when>
+				</choose>
+			</where>
+		</if>
+	    order by 1 desc
+</select>
+</mapper>  

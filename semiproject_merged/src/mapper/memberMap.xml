@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mymem">
+	<insert id="add" parameterType="mvo">
+		insert into patient
+		values(patient_seq.nextVal,#{pid},#{ppwd},#{pname},#{ppernum},#{paddr},#{ptel},sysdate)
+	</insert>
+	<select id="list" resultType="mvo" parameterType="map">
+		select num,id,name,age,gender,mdate from mymember
+
+		<if test="searchValue != null and searchType != null">
+			<where>
+				<choose>
+					<when test="searchType == 1">
+						id like '%'|| #{searchValue} ||'%'
+					</when>
+					<when test="searchType == 2">
+						name like '%'|| #{searchValue} ||'%'
+					</when>
+				</choose>
+			</where>
+		</if>
+		order by 1 desc
+	</select>
+	<!-- page process -->
+	<select id="listpage" resultType="mvo" parameterType="map">
+		select *
+		from (
+		select rownum r_num, a.* from (
+		select * from mymember order by
+		num desc
+		) a
+		) where r_num BETWEEN #{begin} and #{end}
+	</select>
+	<!-- total process -->
+	<select id="totalCount" resultType="int">
+		select count(*) from mymember
+	</select>
+	<!-- 팀별 미션 -->
+
+	<select id="listSearchpage" resultType="mvo" parameterType="pgSvo">
+		select num,
+		<if test="searchValue != null and searchType != null">
+		<![CDATA[replace(id,#{searchValue},'<span style="color:blue">'||#{searchValue}||'</span>') 
+		]]>
+		</if>id,	
+		<if test="searchValue != null and searchType != null">
+		<![CDATA[replace(name,#{searchValue},'<span style="color:blue">'||#{searchValue}||'</span>') 
+		]]>
+		</if> name,
+		age,gender,mdate from (
+		select rownum r_num, a.* from (
+		select
+		num,id,name,age,gender,mdate from mymember
+
+		<if test="searchValue != null and searchType != null">
+			<where>
+				<choose>
+					<when test="searchType == 1">
+						id like '%'|| #{searchValue} ||'%'
+					</when>
+					<when test="searchType == 2">
+						name like '%'|| #{searchValue} ||'%'
+					</when>
+				</choose>
+			</where>
+		</if>
+
+		order by num desc
+		) a
+		) where r_num BETWEEN #{begin} and #{end}
+	</select>
+	<!-- total process -->
+	<select id="totalCount2" resultType="int" parameterType="pgSvo">
+		select count(*) from mymember
+		<if test="searchValue != null and searchType != null">
+			<where>
+				<choose>
+					<when test="searchType == 1">
+						id like '%'|| #{searchValue} ||'%'
+					</when>
+					<when test="searchType == 2">
+						name like '%'|| #{searchValue} ||'%'
+					</when>
+				</choose>
+			</where>
+		</if>
+	</select>
+
+
+
+	<select id="idChk" parameterType="String" resultType="int">
+		select
+		count(*) from patient where pid=#{id}
+	</select>
+	<!-- login Query -->
+	<select id="login" parameterType="mvo" resultType="int">
+		select
+		count(*) from patient where pid=#{pid} and ppwd=#{ppwd}
+	</select>
+	<select id="myPage" parameterType="String" resultType="mvo">
+		select
+		pid,pname,paddr,ptel,decode(substr(ppernum,8,1),1,'남자',3,'남자','여자')as gender,
+		to_char(sysdate,'yyyy')-to_char(to_date(substr(ppernum,1,6)),'YYYY') as page
+		
+		
+		from patient where pid=#{pid}
+		
+	</select>
+	
+	<select id="modifi" parameterType="mvo" resultType="String">
+	update patient set 
+	ppwd=${ppwd},
+	paddr=${paddr},
+	ptel=${ptel}
+	where pid=${pid};
+	</select>
+
+</mapper>  

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<typeAliases>
+	<typeAlias type="dto.MymemberDTO" alias="mvo"/>
+	<typeAlias type="dto.PageSearchDTO" alias="pgSvo"/>
+	<typeAlias type="dto.MyBoardDTO" alias="myboard"/>
+	<typeAlias type="dto.MyBoardCommDTO" alias="myboardcomm"/>
+</typeAliases>
+<environments default="">
+<environment id="">
+<transactionManager type="JDBC"/>
+<dataSource type="JNDI">
+	<property name="data_source" value="java:comp/env/jdbc/myora"/>
+</dataSource>
+</environment>
+</environments>
+<mappers>
+	<mapper resource="mapper/memberMap.xml"/>
+	<mapper resource="mapper/naverdateMap.xml"/>
+	<mapper resource="mapper/myBoardMap.xml"/>
+</mappers>
+</configuration>  

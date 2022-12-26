@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="myboard">
+	<insert id="add" parameterType="mvo">
+		insert into myboardtest values(myboardtest_seq.nextVal,#{writer},#{subject},#{content},#{reip},sysdate)
+	</insert>
+
+  	<select id="list" resultType="myboard">
+  		select
+  		b.no,b.writer,b.subject,b.reip,b.regdate,count(bc.mcode) cnt
+  		from myboardtest b, myboardtest_comm bc where b.no=bc.mcode(+)
+  		group by b.no,b.writer,b.subject,b.reip,b.regdate,bc.mcode
+  		order by 1 desc
+  	</select>
+
+	<select id="detail" resultType="myboard" parameterType="int">
+		select no,writer,subject,content,reip,regdate from myboardtest where no = #{no}
+	</select>
+	
+	<insert id="addComm" parameterType="myboardcomm">
+	insert into myboardtest_comm
+	values(myboardtest_comm_seq.nextVal,#{mcode},#{mwriter}
+	,#{mcontent},#{reip},sysdate)
+	</insert>
+	
+	
+	
+	<select id="listComm" resultType="myboardcomm" parameterType="int">
+	select no,mcode,mwriter,mcontent,reip,mregdate from
+	myboardtest_comm
+	where mcode=#{mcode} order by 1 desc
+	</select>
+
+	<select id="delete" resultType="myboard" parameterType="int">
+	delete from myboardtest where no = #{no}
+	</select>
+	
+
+
+</mapper>  
