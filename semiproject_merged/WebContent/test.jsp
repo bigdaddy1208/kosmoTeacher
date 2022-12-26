@@ -8,9 +8,10 @@
 </head>
 <body>
 <h1>Test</h1>
-<<<<<<< HEAD
+
 <p>Test11</p>
 <div>MyWork</div>
 
+<p>work1111</p>
 </body>
 </html>
