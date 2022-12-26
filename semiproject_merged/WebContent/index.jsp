@@ -3,4 +3,5 @@
 
     <%
     response.sendRedirect("pro.kosmo?cmd=index");
+    // test
     %>
